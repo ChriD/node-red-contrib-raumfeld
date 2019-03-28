@@ -5,7 +5,7 @@
         defaults: {
             name: {value: ""},
             raumkernel: {type: "raumfeld-raumkernel", required: true},
-            scope: {value: "ROOM"},
+            scope: {value: "ZONE"},
             roomName: {value: ""},
             state: {value: "", required: true}
         },
@@ -13,7 +13,7 @@
         outputs:1,
         icon: "raumfeld.png",
         label: function() {
-            return this.name || "changed " + (this.state ? this.state : "state") + " on " + (this.roomName ? this.roomName : this.scope)
+            return this.name || "changed " + (this.state ? this.state : "state") + " on " + (this.roomName ? "'" + this.roomName + "'" : this.scope)
         }
     });
 </script>
@@ -23,12 +23,10 @@
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
-
     <div class="form-row">
         <label for="node-input-raumkernel"><i class="fa fa-globe"></i> Raumkernel</label>
         <input type="text" id="node-input-raumkernel">
     </div>
-
     <div class="form-row">
         <label for="node-input-scope"><i class="fa fa-home"></i><span>Scope</span></label>
         <select type="text" id="node-input-scope">
@@ -36,12 +34,10 @@
             <option value="ZONE">Zone Renderer</option>
         </select>
     </div>
-
     <div class="form-row">
         <label for="node-input-roomName"><i class="fa fa-home"></i> Room name</label>
         <input type="text" id="node-input-roomName" placeholder="Room name">
     </div>
-
     <div class="form-row">
         <label for="node-input-state"><i class="fa fa-home"></i><span>State</span></label>
         <select type="text" id="node-input-state">
@@ -55,23 +51,15 @@
 </script>
 
 <script type="text/x-red" data-help-name="raumfeld-renderer-stateChanged">
-    <p>Gets a specific state for a virtual or room renderer</p>
-
-    <h3>Inputs</h3>
-        <dl class="message-properties">
-            <dt>payload <span class="property-type">string</span></dt>
-            <dd>the room to get play state for.</dd>
-            <dt class="optional">roomName <span class="property-type">string</span></dt>
-            <dd>the room to get play state for.</dd>
-        </dl>
+    <p>messagesa specific state changes for a virtual renderer or a room renderer</p>
 
     <h3>Outputs</h3>
         <dl class="message-properties">
-            <dl class="message-properties">
-                <dt>payload <span class="property-type">string</span></dt>
-                <dd><code>true</code> if the room is playing, <code>false</code> if not.</dd>
-                <dt>roomName <span class="property-type">string</span></dt>
-                <dd>the name.</dd>
-            </dl>
+            <dt>payload <span class="property-type">string</span></dt>
+            <dd>the value of the state which may be a <code>string</code> a <code>number</code> a <code>boolean</code> or an <code>object</code> depending on which state is beeing readed</dd>
+            <dt>rendererIdentification <span class="property-type">object</span></dt>
+            <dd>an identification object of the render from which the state is origined which includes <code>name</code>, <code>udn</code> and <code>isZone</code></dd>
+            <dt class="optional">rendererStateDetail <span class="property-type">object</span></dt>
+            <dd>an state value detail object which includes <code>key</code>, <code>oldValue</code> and <code>newValue</code></dd>
         </dl>
 </script>
