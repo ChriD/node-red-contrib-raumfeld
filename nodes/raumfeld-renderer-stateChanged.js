@@ -52,7 +52,7 @@ module.exports = function(RED) {
         // generate media renderer identifier data and include it to the message root
         msg.rendererIdentification = this.generateRendererIdentification(_mediaRenderer)
 
-        if(state == "MEDIAINFO")
+        if(state == "MEDIAINFO" || state == "ANYSTATE")
           msg.payload = this.copyObject(_mediaItemData)
 
         if (msg.hasOwnProperty("payload")) this.send(msg)
