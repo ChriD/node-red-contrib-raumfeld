@@ -1,0 +1,77 @@
+<script type="text/javascript">
+    RED.nodes.registerType('raumfeld-renderer-stateChanged',{
+        category: 'raumfeld function',
+        color: '#CBCBCB',
+        defaults: {
+            name: {value: ""},
+            raumkernel: {type: "raumfeld-raumkernel", required: true},
+            scope: {value: "ROOM"},
+            roomName: {value: ""},
+            state: {value: "", required: true}
+        },
+        inputs:0,
+        outputs:1,
+        icon: "raumfeld.png",
+        label: function() {
+            return this.name || "changed " + (this.state ? this.state : "state") + " on " + (this.roomName ? this.roomName : this.scope)
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="raumfeld-renderer-stateChanged">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-raumkernel"><i class="fa fa-globe"></i> Raumkernel</label>
+        <input type="text" id="node-input-raumkernel">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-scope"><i class="fa fa-home"></i><span>Scope</span></label>
+        <select type="text" id="node-input-scope">
+            <option value="ROOM">Room Renderer</option>
+            <option value="ZONE">Zone Renderer</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-roomName"><i class="fa fa-home"></i> Room name</label>
+        <input type="text" id="node-input-roomName" placeholder="Room name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-input-state"><i class="fa fa-home"></i><span>State</span></label>
+        <select type="text" id="node-input-state">
+            <option value="VOLUME">Volume</option>
+            <option value="MUTE">Mute</option>
+            <option value="ISPLAYING">Is Playing</option>
+            <option value="MEDIAINFO">Media Info</option>
+            <option value="ANYSTATE">Any State</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="raumfeld-renderer-stateChanged">
+    <p>Gets a specific state for a virtual or room renderer</p>
+
+    <h3>Inputs</h3>
+        <dl class="message-properties">
+            <dt>payload <span class="property-type">string</span></dt>
+            <dd>the room to get play state for.</dd>
+            <dt class="optional">roomName <span class="property-type">string</span></dt>
+            <dd>the room to get play state for.</dd>
+        </dl>
+
+    <h3>Outputs</h3>
+        <dl class="message-properties">
+            <dl class="message-properties">
+                <dt>payload <span class="property-type">string</span></dt>
+                <dd><code>true</code> if the room is playing, <code>false</code> if not.</dd>
+                <dt>roomName <span class="property-type">string</span></dt>
+                <dd>the name.</dd>
+            </dl>
+        </dl>
+</script>
