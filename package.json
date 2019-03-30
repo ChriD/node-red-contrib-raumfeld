@@ -34,7 +34,8 @@
       "raumfeld room title changed": "./nodes/raumfeld-room-title-changed.js",
       "raumfeld room volume changed": "./nodes/raumfeld-room-volume-changed.js",
       "raumfeld renderer get state": "./nodes/raumfeld-renderer-getState.js",
-      "raumfeld renderer state changed": "./nodes/raumfeld-renderer-stateChanged.js"
+      "raumfeld renderer state changed": "./nodes/raumfeld-renderer-stateChanged.js",
+      "raumfeld create zone": "./nodes/raumfeld-common-createZone.js"
     }
   }
 }

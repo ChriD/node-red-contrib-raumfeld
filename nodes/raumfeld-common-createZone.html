@@ -1,0 +1,126 @@
+<script type="text/javascript">
+    RED.nodes.registerType('raumfeld-common-createZone',{
+        category: 'raumfeld function',
+        color: '#CBCBCB',
+        defaults: {
+            name: {value: ""},
+            raumkernel: {type: "raumfeld-raumkernel", required: true},
+            rooms: {value:[{roomName:""}]},
+        },
+        inputs:1,
+        outputs:1,
+        icon: "raumfeld.png",
+        label: function() {
+            //let roomsInfo
+            //for(var idx=0; idx <this.rooms.value.length(); idx++)
+            //roomsInfo += (roomsInfo ? ", " : "") + this.rooms.value[idx].roomName
+            //return this.name || "create zone for " + roomsInfo
+            return this.name || "create zone for"
+        },
+        oneditprepare: function() {
+            var node = this;
+            var outputCount = $("#node-input-outputs").val("{}");
+
+            // we need a function to resize the controls in the row item whenever a resize or a add happens
+            function resizeItemControls(row) {
+                var newWidth    = row.width();
+                var valueField  = row.find(".node-input-room-value");
+                valueField.width((newWidth-25));
+            }
+
+            $("#node-input-rooms-container").css('min-height','250px').css('min-width','450px').editableList({
+                addItem: function(container, i, opt) {
+                    // add the value input field
+                    container.css({
+                        overflow: 'hidden',
+                        whiteSpace: 'nowrap'
+                    });
+                    var row = $('<div/>').appendTo(container);
+                    var valueField = $('<input/>',{class:"node-input-room-value",type:"text",style:"margin-left: 5px;"}).appendTo(row);
+                    var finalspan = $('<span/>',{style:"float: right;margin-top: 6px;"}).appendTo(row);
+
+                    // resize the roe copntrols
+                    resizeItemControls(container);
+
+                    // fill the saved data to the input field
+                    var rowData = opt.r;
+                    valueField.val(rowData.roomName)
+                },
+                removeItem: function(opt) {
+                },
+                resizeItem: resizeItemControls,
+                sortItems: function(rows) {
+                },
+                sortable: false,
+                removable: true
+            });
+
+            // on load of the list we do create a item in the list for each saved row
+            for (var i=0;i<this.rooms.length;i++) {
+                var room = this.rooms[i];
+                $("#node-input-rooms-container").editableList('addItem',{r:room,i:i});
+            }
+        },
+        oneditsave: function() {
+            var rows = $("#node-input-rooms-container").editableList('items');
+            var node = this;
+            // clear the current row data
+            node.rooms = [];
+            // run through the items in the list and copy/store the to our default (node.rooms)
+            rows.each(function(i) {
+                var row = $(this);
+                var r = {};
+                r.roomName = row.find(".node-input-room-value").val()
+                node.rooms.push(r);
+            });
+        },
+        oneditresize: function(size) {
+            var rows = $("#dialog-form>div:not(.node-input-rooms-container-row)");
+            var height = size.height;
+            for (var i=0;i<rows.size();i++) {
+                height -= $(rows[i]).outerHeight(true);
+            }
+            var editorRow = $("#dialog-form>div.node-input-rooms-container-row");
+            height -= (parseInt(editorRow.css("marginTop"))+parseInt(editorRow.css("marginBottom")));
+            $("#node-input-rooms-container").editableList('height',height);
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="raumfeld-common-createZone">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-raumkernel"><i class="fa fa-globe"></i> Raumkernel</label>
+        <input type="text" id="node-input-raumkernel">
+    </div>
+    <div class="form-row node-input-rooms-container-row">
+        <ol id="node-input-rooms-container"></ol>
+    </div>
+
+</script>
+
+<script type="text/x-red" data-help-name="raumfeld-common-createZone">
+    <p>Gets a specific state for a virtual renderer (zone) or room renderer (room)</p>
+
+    <h3>Inputs</h3>
+        <dl class="message-properties">
+            <dt class="optional">roomName <span class="property-type">string</span></dt>
+            <dd>the room to get play state for</dd>
+            <dt class="optional">scope <span class="property-type">string</span></dt>
+            <dd>the scope (<code>ZONE</code> or <code>ROOM</code>) where the state value should be read from)</dd>
+            <dt class="optional">state <span class="property-type">string</span></dt>
+            <dd>the state identifier which state value should be read. Following states are available: <code>VOLUME</code>, <code>MUTE</code>, <code>ISPLAYING</code>, <code>HASMEDIA</code>, <code>MEDIAINFO</code>, <code>FULLSTATE</code>(</dd>
+        </dl>
+
+
+    <h3>Outputs</h3>
+        <dl class="message-properties">
+            <dt>payload <span class="property-type">string</span></dt>
+            <dd>the value of the state which may be a <code>string</code> a <code>number</code> a <code>boolean</code> or an <code>object</code> depending on which state is beeing readed</dd>
+            <dt>rendererIdentification <span class="property-type">object</span></dt>
+            <dd>an identification object of the render from which the state is origined which includes <code>name</code>, <code>udn</code> and <code>isZone</code></dd>
+        </dl>
+</script>
