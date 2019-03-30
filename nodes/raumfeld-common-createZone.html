@@ -11,11 +11,10 @@
         outputs:1,
         icon: "raumfeld.png",
         label: function() {
-            //let roomsInfo
-            //for(var idx=0; idx <this.rooms.value.length(); idx++)
-            //roomsInfo += (roomsInfo ? ", " : "") + this.rooms.value[idx].roomName
-            //return this.name || "create zone for " + roomsInfo
-            return this.name || "create zone for"
+            let roomsInfo = ""
+            for(var idx=0; idx <this.rooms.length; idx++)
+                roomsInfo += (roomsInfo ? ", " : "") + this.rooms[idx].roomName
+            return this.name || "create zone for '" + roomsInfo + "'"
         },
         oneditprepare: function() {
             var node = this;
