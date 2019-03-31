@@ -31,6 +31,8 @@ module.exports = function(RED) {
 
             var es = node.raumkernelNode.raumkernel.encodeString;
 
+            // TODO: MYPLAYLISTS
+            /*
             node.raumkernelNode.deviceManager.mediaRenderersVirtual.forEach(existingMediaRendererVirtual => {
                 if (existingMediaRendererVirtual.currentMediaItemData) {
                     if (existingMediaRendererVirtual.currentMediaItemData.containerId == MYPLAYLISTS + es(playlist)
@@ -40,6 +42,7 @@ module.exports = function(RED) {
                     }
                 }
             });
+            */
 
             if (alreadyPlaying)  {
                 if (overrideVolume && volumes[0]) {
@@ -87,7 +90,7 @@ module.exports = function(RED) {
                     });
                 }
                 else {
-                    roomMediaRenderer.leaveStandby(true).then(function() {
+                    roomMediaRenderer.leaveStandby(true).then(function() {  // TODO: @@@ error
                         for (let i = 1; i < roomMediaRenderers.length; i++) {
                             if (!mediaRendererVirtual.rendererState["rooms"][roomMediaRenderers[i].roomUdn()]) {
                                 node.raumkernelNode.zoneManager.connectRoomToZone(roomMediaRenderers[i].roomUdn(), mediaRendererVirtual.udn());

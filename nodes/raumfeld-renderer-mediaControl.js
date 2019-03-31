@@ -18,15 +18,16 @@ module.exports = function(RED) {
 
         node.on("input", function(_msg){
 
-          node.config.roomName  = node.config.roomName || _msg.roomName;
-          node.config.scope     = node.config.scope    || _msg.scope;
-          node.config.action    = node.config.action   || _msg.action;
+          node.curConfig = node.copyObject(node.config)
+          node.curConfig.roomName  = node.config.roomName || _msg.roomName;
+          node.curConfig.scope     = node.config.scope    || _msg.scope;
+          node.curConfig.action    = node.config.action   || _msg.action;
 
-          if(!node.config.roomName)
+          if(!node.curConfig.roomName)
             return
-          if(!node.config.scope)
+          if(!node.curConfig.scope)
             return
-          if(!node.config.action)
+          if(!node.curConfig.action)
             return
 
           node.doAction(node.getSelectedRenderers())
@@ -48,7 +49,7 @@ module.exports = function(RED) {
           for(var idx=0; idx<_renderers.length; idx++)
           {
             var renderer = _renderers[idx]
-            switch(node.config.action.toUpperCase())
+            switch(node.curConfig.action.toUpperCase())
             {
               case "PLAY":
                 renderer.play()
@@ -66,14 +67,14 @@ module.exports = function(RED) {
                 renderer.prev()
                 break
               case "PLAYMODE":
-                renderer.setPlayMode(node.config.playmode.toUpperCase())
+                renderer.setPlayMode(node.curConfig.playmode.toUpperCase())
                 break
             }
           }
         }
         else
         {
-          node.warn("Could not find renderer for '" + node.config.roomName + "'")
+          node.warn("Could not find renderer for '" + node.curConfig.roomName + "'")
         }
 
         return msg

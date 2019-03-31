@@ -18,9 +18,10 @@ module.exports = function(RED) {
 
         node.on("input", function(_msg){
 
-          node.config.rooms = node.config.rooms || _msg.rooms
+          node.curConfig = node.copyObject(node.config)
+          node.curConfig.rooms = node.config.rooms || _msg.rooms
 
-          if(!node.config.rooms.length)
+          if(!node.curConfig.rooms.length)
             return
 
           // check if zone which should be created exists as given in the parameters
@@ -39,8 +40,8 @@ module.exports = function(RED) {
         var nodeRoomNames = []
         var zoneMap       = this.raumkernel.managerDisposer.zoneManager.zoneMap
 
-        for(let idx=0; idx<this.config.rooms.length; idx++)
-          nodeRoomNames.push(this.config.rooms[idx].roomName.toUpperCase())
+        for(let idx=0; idx<this.curConfig.rooms.length; idx++)
+          nodeRoomNames.push(this.curConfig.rooms[idx].roomName.toUpperCase())
 
         // run trough all zones and check if there is an exact match for the rooms giben in the parameter
         for (const [key, value] of zoneMap.entries())
@@ -66,11 +67,11 @@ module.exports = function(RED) {
       {
         var firstRoomUdn = ""
 
-        for(let idx=0; idx<this.config.rooms.length; idx++)
+        for(let idx=0; idx<this.curConfig.rooms.length; idx++)
         {
-          var roomUDN = this.raumkernel.managerDisposer.zoneManager.getRoomUdnForMediaRendererUDN(this.config.rooms[idx].roomName)
+          var roomUDN = this.raumkernel.managerDisposer.zoneManager.getRoomUdnForMediaRendererUDN(this.curConfig.rooms[idx].roomName)
           if(!roomUDN)
-            this.warn("Room '" + this.config.rooms[idx].roomName + "' not found in raumfeld system")
+            this.warn("Room '" + this.curConfig.rooms[idx].roomName + "' not found in raumfeld system")
           // create a new zone for the first room
           if(idx === 0)
           {

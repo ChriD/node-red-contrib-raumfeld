@@ -18,18 +18,19 @@ module.exports = function(RED) {
 
         node.on("input", function(_msg){
 
-          node.config.roomName        = node.config.roomName        || _msg.roomName
-          node.config.scope           = node.config.scope           || _msg.scope
-          node.config.ressourceType   = node.config.ressourceType   || _msg.ressourceType
-          node.config.ressourceValue  = node.config.ressourceValue  || _msg.ressourceValue || _msg.payload
+          node.curConfig = node.copyObject(node.config)
+          this.curConfig.roomName       = node.config.roomName        || _msg.roomName
+          this.curConfig.scope          = node.config.scope           || _msg.scope
+          this.curConfig.ressourceType  = node.config.ressourceType   || _msg.ressourceType
+          this.curConfig.ressourceValue = node.config.ressourceValue  || _msg.ressourceValue || _msg.payload
 
-          if(!node.config.roomName)
+          if(!this.curConfig.roomName)
             return
-          if(!node.config.scope)
+          if(!this.curConfig.scope)
             return
-          if(!node.config.ressourceType)
+          if(!this.curConfig.ressourceType)
             return
-          if(!node.config.ressourceValue)
+          if(!this.curConfig.ressourceValue)
             return
 
           // TODO: allow set of random / repeat --> make defined rF object?
@@ -56,25 +57,25 @@ module.exports = function(RED) {
         {
           try
           {
-            switch(node.config.ressourceType.toUpperCase())
+            switch(this.curConfig.ressourceType.toUpperCase())
             {
               case "PLAYLIST":
-                await _renderer.loadPlaylist(node.config.ressourceValue, 1, true)
+                await _renderer.loadPlaylist(this.curConfig.ressourceValue, 1, true)
                 break
               case "CONTAINER":
-                await _renderer.loadContainer(node.config.ressourceValue, "", 1, false, true)
+                await _renderer.loadContainer(this.curConfig.ressourceValue, "", 1, false, true)
                 break
               case "SINGLE":
-                await _renderer.loadSingle(node.config.ressourceValue, "", false, true)
+                await _renderer.loadSingle(this.curConfig.ressourceValue, "", false, true)
                 break
               case "LINEIN":
-                await _renderer.loadSingle(node.config.ressourceValue, true)
+                await _renderer.loadSingle(this.curConfig.ressourceValue, true)
                 break
               case "URL":
-                await _renderer.loadUri(node.config.ressourceValue, false, true)
+                await _renderer.loadUri(this.curConfig.ressourceValue, false, true)
                 break
               case "SHUFFLE":
-                await _renderer.loadShuffle(node.config.ressourceValue, "", false, true)
+                await _renderer.loadShuffle(this.curConfig.ressourceValue, "", false, true)
                 break
             }
           }
@@ -85,7 +86,7 @@ module.exports = function(RED) {
         }
         else
         {
-          node.warn("Could not find renderer for '" + node.config.roomName + "'")
+          node.warn("Could not find renderer for '" + this.curConfig.roomName + "'")
         }
 
         return msg

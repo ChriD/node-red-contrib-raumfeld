@@ -18,15 +18,16 @@ module.exports = function(RED) {
 
         node.on("input", function(_msg){
 
-          node.config.roomName = node.config.roomName || _msg.roomName;
-          node.config.scope    = node.config.scope    || _msg.scope;
-          node.config.state    = node.config.state    || _msg.state;
+          node.curConfig = node.copyObject(node.config)
+          node.curConfig.roomName = node.config.roomName || _msg.roomName;
+          node.curConfig.scope    = node.config.scope    || _msg.scope;
+          node.curConfig.state    = node.config.state    || _msg.state;
 
-          if(!node.config.roomName)
+          if(!node.curConfig.roomName)
             return
-          if(!node.config.scope)
+          if(!node.curConfig.scope)
             return
-          if(!node.config.state)
+          if(!node.curConfig.state)
             return
 
           var msg = node.generateMsgForRendererState(node.getSelectedRenderer())
@@ -46,7 +47,7 @@ module.exports = function(RED) {
           // generate media renderer identifier data and include it to the message root
           msg.rendererIdentification = node.generateRendererIdentification(_renderer)
 
-          switch(node.config.state.toUpperCase())
+          switch(node.curConfig.state.toUpperCase())
           {
             case "VOLUME":
               msg.payload = _renderer.rendererState.Volume
@@ -70,7 +71,7 @@ module.exports = function(RED) {
         }
         else
         {
-          node.warn("Could not find renderer '" + node.config.roomName + "'")
+          node.warn("Could not find renderer '" + node.curConfig.roomName + "'")
         }
 
         return msg
