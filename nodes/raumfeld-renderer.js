@@ -48,6 +48,18 @@ class Raumfeld_Node_Renderer extends Raumfeld_Node
     return useZoneRenderer ? this.raumkernelNode.deviceManager.getVirtualMediaRenderer(this.config.roomName) : this.raumkernelNode.deviceManager.getMediaRenderer(this.config.roomName)
   }
 
+
+    /**
+   * returns an array renderer object for the given scope and room
+   * @return an array of room or virtual renderer object, may be null if no renderer is found for the given settings!
+   */
+  getSelectedRenderers()
+  {
+    // TODO: multiple selection!
+    var useZoneRenderer = this.config.scope == "ZONE" ? true : false;
+    return [useZoneRenderer ? this.raumkernelNode.deviceManager.getVirtualMediaRenderer(this.config.roomName) : this.raumkernelNode.deviceManager.getMediaRenderer(this.config.roomName)]
+  }
+
   /**
   * returns an identification object usefull for message outputs
   * @param _renderer a media renderer object

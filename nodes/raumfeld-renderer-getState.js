@@ -18,9 +18,9 @@ module.exports = function(RED) {
 
         node.on("input", function(_msg){
 
-          node.config.roomName = node.config.roomName || _msg.payload.roomName;
-          node.config.scope    = node.config.scope    || _msg.payload.scope;
-          node.config.state    = node.config.state    || _msg.payload.state;
+          node.config.roomName = node.config.roomName || _msg.roomName;
+          node.config.scope    = node.config.scope    || _msg.scope;
+          node.config.state    = node.config.state    || _msg.state;
 
           if(!node.config.roomName)
             return

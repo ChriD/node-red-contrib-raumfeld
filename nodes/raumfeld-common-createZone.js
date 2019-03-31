@@ -18,28 +18,18 @@ module.exports = function(RED) {
 
         node.on("input", function(_msg){
 
+          node.config.rooms = node.config.rooms || _msg.rooms
+
+          if(!node.config.rooms.length)
+            return
+
           // check if zone which should be created exists as given in the parameters
           // if not we have to create the zone and we have to await until its finished
           if(!node.existsZone())
             node.createZone()
 
-
-
-          /*
-          node.config.roomName = node.config.roomName || _msg.payload.roomName;
-          node.config.scope    = node.config.scope    || _msg.payload.scope;
-          node.config.state    = node.config.state    || _msg.payload.state;
-
-          if(!node.config.roomName)
-            return
-          if(!node.config.scope)
-            return
-          if(!node.config.state)
-            return
-
-          var msg = node.generateMsgForRendererState(node.getSelectedRenderer())
-          if (msg.hasOwnProperty("payload")) node.send(msg)
-          */
+          // redirect incoming mesage directly to output
+          if (_msg.hasOwnProperty("payload")) node.send(_msg)
         })
 
       }
