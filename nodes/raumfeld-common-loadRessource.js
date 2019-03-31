@@ -19,18 +19,18 @@ module.exports = function(RED) {
         node.on("input", function(_msg){
 
           node.curConfig = node.copyObject(node.config)
-          this.curConfig.roomName       = node.config.roomName        || _msg.roomName
-          this.curConfig.scope          = node.config.scope           || _msg.scope
-          this.curConfig.ressourceType  = node.config.ressourceType   || _msg.ressourceType
-          this.curConfig.ressourceValue = node.config.ressourceValue  || _msg.ressourceValue || _msg.payload
+          node.curConfig.roomName       = node.config.roomName        || _msg.roomName
+          node.curConfig.scope          = node.config.scope           || _msg.scope
+          node.curConfig.ressourceType  = node.config.ressourceType   || _msg.ressourceType
+          node.curConfig.ressourceValue = node.config.ressourceValue  || _msg.ressourceValue || _msg.payload
 
-          if(!this.curConfig.roomName)
+          if(!node.curConfig.roomName)
             return
-          if(!this.curConfig.scope)
+          if(!node.curConfig.scope)
             return
-          if(!this.curConfig.ressourceType)
+          if(!node.curConfig.ressourceType)
             return
-          if(!this.curConfig.ressourceValue)
+          if(!node.curConfig.ressourceValue)
             return
 
           // TODO: allow set of random / repeat --> make defined rF object?
